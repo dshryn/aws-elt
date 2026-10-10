@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Flight Delay Predictor</title>
+
+    <link rel="stylesheet" href="../static/style.css" />
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+
+  <body>
+    <div class="page-container">
+      <!-- =================================================
+             HEADER
+        ================================================== -->
+
+      <header class="header">
+        <div class="header-icon">✈</div>
+
+        <div>
+          <h1>Flight Delay Predictor</h1>
+
+          <p>
+            Predict whether an airline is likely to experience a high-delay
+            month.
+          </p>
+        </div>
+      </header>
+
+      <!-- =================================================
+             MAIN CARD
+        ================================================== -->
+
+      <main class="main-card">
+        <!-- =================================================
+                 INPUT SECTION
+            ================================================== -->
+
+        <section class="input-section">
+          <h2>Flight Information</h2>
+
+          <p class="section-description">
+            Enter the information available from the previous observation/month.
+          </p>
+
+          <form id="predictionForm">
+            <!-- AIRLINE -->
+
+            <div class="form-group">
+              <label for="airline">Airline</label>
+
+              <select id="airline" name="airline" required>
+                <option value="">Select airline</option>
+
+                <option value="Alaska Airlines Inc.">
+                  Alaska Airlines Inc.
+                </option>
+
+                <option value="Allegiant Air">Allegiant Air</option>
+
+                <option value="American Airlines Inc.">
+                  American Airlines Inc.
+                </option>
+
+                <option value="Delta Air Lines Inc.">
+                  Delta Air Lines Inc.
+                </option>
+
+                <option value="Endeavor Air Inc.">Endeavor Air Inc.</option>
+
+                <option value="Envoy Air">Envoy Air</option>
+
+                <option value="Frontier Airlines Inc.">
+                  Frontier Airlines Inc.
+                </option>
+
+                <option value="Hawaiian Airlines Inc.">
+                  Hawaiian Airlines Inc.
+                </option>
+
+                <option value="Horizon Air">Horizon Air</option>
+
+                <option value="JetBlue Airways">JetBlue Airways</option>
+
+                <option value="Mesa Airlines Inc.">Mesa Airlines Inc.</option>
+
+                <option value="PSA Airlines Inc.">PSA Airlines Inc.</option>
+
+                <option value="Republic Airline">Republic Airline</option>
+
+                <option value="SkyWest Airlines Inc.">
+                  SkyWest Airlines Inc.
+                </option>
+
+                <option value="Southwest Airlines Co.">
+                  Southwest Airlines Co.
+                </option>
+
+                <option value="Spirit Air Lines">Spirit Air Lines</option>
+
+                <option value="United Air Lines Inc.">
+                  United Air Lines Inc.
+                </option>
+              </select>
+            </div>
+
+            <!-- MONTH -->
+
+            <div class="form-group">
+              <label for="month">Prediction Month</label>
+
+              <select id="month" name="month" required>
+                <option value="">Select month</option>
+
+                <option value="1">January</option>
+
+                <option value="2">February</option>
+
+                <option value="3">March</option>
+
+                <option value="4">April</option>
+
+                <option value="5">May</option>
+
+                <option value="6">June</option>
+
+                <option value="7">July</option>
+
+                <option value="8">August</option>
+
+                <option value="9">September</option>
+
+                <option value="10">October</option>
+
+                <option value="11">November</option>
+
+                <option value="12">December</option>
+              </select>
+            </div>
+
+            <!-- PREVIOUS ARRIVAL DELAY RATE -->
+
+            <div class="form-group">
+              <label for="prevArrivalDelayRate">
+                Previous Arrival Delay Rate
+
+                <span class="hint">0 - 1</span>
+              </label>
+
+              <input
+                type="number"
+                id="prevArrivalDelayRate"
+                name="prevArrivalDelayRate"
+                placeholder="e.g. 0.32"
+                min="0"
+                max="1"
+                step="0.0001"
+                required
+              />
+            </div>
+
+            <!-- PREVIOUS AVG ARRIVAL DELAY -->
+
+            <div class="form-group">
+              <label for="prevAvgArrDelay">
+                Previous Average Arrival Delay
+
+                <span class="hint">minutes</span>
+              </label>
+
+              <input
+                type="number"
+                id="prevAvgArrDelay"
+                name="prevAvgArrDelay"
+                placeholder="e.g. 8.5"
+                step="0.01"
+                required
+              />
+            </div>
+
+            <!-- PREVIOUS TOTAL FLIGHTS -->
+
+            <div class="form-group">
+              <label for="prevTotalFlights"> Previous Total Flights </label>
+
+              <input
+                type="number"
+                id="prevTotalFlights"
+                name="prevTotalFlights"
+                placeholder="e.g. 42000"
+                min="0"
+                step="1"
+                required
+              />
+            </div>
+
+            <!-- PREVIOUS CANCELLATION RATE -->
+
+            <div class="form-group">
+              <label for="prevCancellationRate">
+                Previous Cancellation Rate
+
+                <span class="hint">0 - 1</span>
+              </label>
+
+              <input
+                type="number"
+                id="prevCancellationRate"
+                name="prevCancellationRate"
+                placeholder="e.g. 0.03"
+                min="0"
+                max="1"
+                step="0.0001"
+                required
+              />
+            </div>
+
+            <!-- BUTTON -->
+
+            <button type="submit" id="predictButton">Predict</button>
+          </form>
+        </section>
+
+        <!-- =================================================
+                 RESULT SECTION
+            ================================================== -->
+
+        <section class="result-section" id="resultSection">
+          <div class="result-placeholder">
+            <div class="placeholder-icon">📊</div>
+
+            <h2>Prediction Result</h2>
+
+            <p>
+              Enter the values and click
+              <strong>Predict</strong> to see the model's prediction.
+            </p>
+          </div>
+
+          <!-- ACTUAL RESULT -->
+
+          <div class="result-content" id="resultContent">
+            <div class="result-label">Prediction</div>
+
+            <div class="prediction-text" id="predictionText">—</div>
+
+            <div class="probability-container">
+              <div class="probability-header">
+                <span>High Delay Probability</span>
+
+                <strong id="probabilityText">—</strong>
+              </div>
+
+              <div class="progress-background">
+                <div class="progress-bar" id="progressBar"></div>
+              </div>
+            </div>
+
+            <!-- CHART -->
+
+            <div class="chart-container">
+              <canvas id="probabilityChart"></canvas>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- =================================================
+             FOOTER
+        ================================================== -->
+
+      <footer>Flight Delay Analytics &amp; ML Project</footer>
+    </div>
+
+    <script src="/static/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,415 @@
+/* ============================================================
+   GLOBAL
+============================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+
+  background: #f4f6f8;
+
+  color: #1f2937;
+
+  min-height: 100vh;
+}
+
+/* ============================================================
+   PAGE CONTAINER
+============================================================ */
+
+.page-container {
+  width: 100%;
+
+  max-width: 1100px;
+
+  margin: 0 auto;
+
+  padding: 40px 20px;
+}
+
+/* ============================================================
+   HEADER
+============================================================ */
+
+.header {
+  display: flex;
+
+  align-items: center;
+
+  gap: 16px;
+
+  margin-bottom: 30px;
+}
+
+.header-icon {
+  width: 58px;
+
+  height: 58px;
+
+  border-radius: 14px;
+
+  background: #2563eb;
+
+  color: white;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 28px;
+}
+
+.header h1 {
+  font-size: 30px;
+
+  margin-bottom: 6px;
+}
+
+.header p {
+  color: #6b7280;
+
+  font-size: 15px;
+}
+
+/* ============================================================
+   MAIN CARD
+============================================================ */
+
+.main-card {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  background: white;
+
+  border-radius: 16px;
+
+  overflow: hidden;
+
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* ============================================================
+   INPUT SECTION
+============================================================ */
+
+.input-section {
+  padding: 32px;
+
+  border-right: 1px solid #e5e7eb;
+}
+
+.input-section h2,
+.result-section h2 {
+  font-size: 21px;
+
+  margin-bottom: 8px;
+}
+
+.section-description {
+  font-size: 14px;
+
+  color: #6b7280;
+
+  margin-bottom: 25px;
+
+  line-height: 1.5;
+}
+
+/* ============================================================
+   FORM
+============================================================ */
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+
+  font-size: 14px;
+
+  font-weight: 600;
+
+  margin-bottom: 7px;
+}
+
+.hint {
+  font-size: 11px;
+
+  color: #9ca3af;
+
+  font-weight: normal;
+
+  margin-left: 4px;
+}
+
+input,
+select {
+  width: 100%;
+
+  padding: 11px 12px;
+
+  border: 1px solid #d1d5db;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  background: white;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: #2563eb;
+
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+/* ============================================================
+   BUTTON
+============================================================ */
+
+button {
+  width: 100%;
+
+  margin-top: 8px;
+
+  padding: 13px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #2563eb;
+
+  color: white;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s,
+    transform 0.1s;
+}
+
+button:hover {
+  background: #1d4ed8;
+}
+
+button:active {
+  transform: scale(0.99);
+}
+
+button:disabled {
+  background: #9ca3af;
+
+  cursor: not-allowed;
+}
+
+/* ============================================================
+   RESULT SECTION
+============================================================ */
+
+.result-section {
+  padding: 32px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-height: 500px;
+}
+
+.result-placeholder {
+  text-align: center;
+
+  color: #6b7280;
+}
+
+.placeholder-icon {
+  font-size: 45px;
+
+  margin-bottom: 15px;
+}
+
+.result-placeholder h2 {
+  color: #374151;
+}
+
+.result-placeholder p {
+  max-width: 300px;
+
+  line-height: 1.6;
+
+  font-size: 14px;
+}
+
+/* ============================================================
+   RESULT CONTENT
+============================================================ */
+
+.result-content {
+  display: none;
+
+  width: 100%;
+}
+
+.result-label {
+  color: #6b7280;
+
+  font-size: 14px;
+
+  margin-bottom: 8px;
+}
+
+.prediction-text {
+  font-size: 30px;
+
+  font-weight: 700;
+
+  margin-bottom: 30px;
+}
+
+.probability-container {
+  margin-bottom: 25px;
+}
+
+.probability-header {
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+}
+
+.probability-header strong {
+  font-size: 18px;
+}
+
+.progress-background {
+  width: 100%;
+
+  height: 14px;
+
+  background: #e5e7eb;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0%;
+
+  height: 100%;
+
+  background: #2563eb;
+
+  border-radius: 20px;
+
+  transition: width 0.6s ease;
+}
+
+/* ============================================================
+   CHART
+============================================================ */
+
+.chart-container {
+  position: relative;
+
+  width: 100%;
+
+  max-width: 420px;
+
+  margin: 20px auto 0;
+}
+
+/* ============================================================
+   FOOTER
+============================================================ */
+
+footer {
+  text-align: center;
+
+  margin-top: 25px;
+
+  color: #9ca3af;
+
+  font-size: 12px;
+}
+
+/* ============================================================
+   ERROR
+============================================================ */
+
+.error-message {
+  background: #fee2e2;
+
+  border: 1px solid #fecaca;
+
+  color: #991b1b;
+
+  padding: 14px;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  line-height: 1.5;
+
+  margin-top: 15px;
+}
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+
+@media (max-width: 800px) {
+  .main-card {
+    grid-template-columns: 1fr;
+  }
+
+  .input-section {
+    border-right: none;
+
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .header h1 {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 500px) {
+  .page-container {
+    padding: 20px 12px;
+  }
+
+  .input-section,
+  .result-section {
+    padding: 22px;
+  }
+}

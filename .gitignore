@@ -1,5 +1,7 @@
 dataset/
 output/
+venv/
+be/__pycache__
 
 secrets.txt
 flight_dashboard.pbix
