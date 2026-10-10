@@ -335,6 +335,8 @@ button:disabled {
 
 /* ============================================================
    CHART
+   Compact horizontal bar chart. Chart.js needs a container
+   with a defined height because maintainAspectRatio is false.
 ============================================================ */
 
 .chart-container {
@@ -342,9 +344,9 @@ button:disabled {
 
   width: 100%;
 
-  max-width: 420px;
+  height: 150px;
 
-  margin: 20px auto 0;
+  margin: 8px auto 0;
 }
 
 /* ============================================================
@@ -411,5 +413,9 @@ footer {
   .input-section,
   .result-section {
     padding: 22px;
+  }
+
+  .chart-container {
+    height: 140px;
   }
 }

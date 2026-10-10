@@ -260,7 +260,8 @@ function displayPrediction(data) {
 
         createProbabilityChart(
             highPercentage,
-            lowPercentage
+            lowPercentage,
+            data.prediction
         );
 
     } else {
@@ -275,9 +276,54 @@ function displayPrediction(data) {
 
 // ============================================================
 // CREATE PROBABILITY CHART
+// Horizontal bars: High Delay vs Low Delay, labelled directly.
 // ============================================================
 
-function createProbabilityChart(highProbability, lowProbability) {
+// Draws each bar's percentage on the bar itself. Inside the bar
+// (white text) when the bar is wide enough, otherwise just to the
+// right of the bar (dark text) so small values stay readable.
+const barValueLabelPlugin = {
+
+    id: "barValueLabels",
+
+    afterDatasetsDraw(chart) {
+
+        const { ctx } = chart;
+        const meta = chart.getDatasetMeta(0);
+        const values = chart.data.datasets[0].data;
+
+        ctx.save();
+        ctx.font = "bold 14px Arial, Helvetica, sans-serif";
+        ctx.textBaseline = "middle";
+
+        meta.data.forEach((bar, index) => {
+
+            const text = `${Number(values[index]).toFixed(1)}%`;
+            const barWidth = bar.x - bar.base;
+
+            if (barWidth >= 64) {
+                ctx.fillStyle = "#ffffff";
+                ctx.textAlign = "right";
+                ctx.fillText(text, bar.x - 10, bar.y);
+            } else {
+                ctx.fillStyle = "#1f2937";
+                ctx.textAlign = "left";
+                ctx.fillText(text, bar.x + 8, bar.y);
+            }
+
+        });
+
+        ctx.restore();
+    }
+
+};
+
+
+function createProbabilityChart(
+    highProbability,
+    lowProbability,
+    predictedClass
+) {
 
     const chartCanvas =
         document.getElementById("probabilityChart");
@@ -292,39 +338,100 @@ function createProbabilityChart(highProbability, lowProbability) {
         return;
     }
 
+    // Destroy any previous chart so instances never accumulate.
     if (probabilityChart !== null) {
         probabilityChart.destroy();
+        probabilityChart = null;
     }
+
+    // Axis labels. The class the model predicted is tagged.
+    const highLabel = predictedClass === 1
+        ? ["High Delay", "(predicted)"]
+        : ["High Delay"];
+
+    const lowLabel = predictedClass === 0
+        ? ["Low Delay", "(predicted)"]
+        : ["Low Delay"];
+
+    // Screen-reader description of the chart.
+    chartCanvas.setAttribute("role", "img");
+    chartCanvas.setAttribute(
+        "aria-label",
+        `High delay probability ${highProbability.toFixed(1)} percent. ` +
+        `Low delay probability ${lowProbability.toFixed(1)} percent.`
+    );
 
     probabilityChart = new Chart(chartCanvas, {
 
-        type: "doughnut",
+        type: "bar",
 
         data: {
-            labels: ["High Delay", "Low Delay"],
+            labels: [highLabel, lowLabel],
             datasets: [{
                 data: [highProbability, lowProbability],
-                borderWidth: 0
+                backgroundColor: ["#dc2626", "#15803d"],
+                borderRadius: 6,
+                borderSkipped: false,
+                maxBarThickness: 34,
+                categoryPercentage: 0.85,
+                barPercentage: 0.9
             }]
         },
 
         options: {
+
+            indexAxis: "y",
+
             responsive: true,
-            maintainAspectRatio: true,
-            plugins: {
-                legend: {
-                    position: "bottom"
+            maintainAspectRatio: false,
+
+            animation: false,
+
+            layout: {
+                padding: { right: 4 }
+            },
+
+            scales: {
+                x: {
+                    min: 0,
+                    max: 100,
+                    ticks: {
+                        stepSize: 25,
+                        color: "#6b7280",
+                        font: { size: 11 },
+                        callback: value => `${value}%`
+                    },
+                    grid: {
+                        color: "#e5e7eb"
+                    },
+                    border: { display: false }
                 },
+                y: {
+                    ticks: {
+                        color: "#1f2937",
+                        font: { size: 13, weight: "bold" }
+                    },
+                    grid: { display: false },
+                    border: { display: false }
+                }
+            },
+
+            plugins: {
+                legend: { display: false },
                 tooltip: {
                     callbacks: {
-                        label: function (context) {
-                            return `${context.label}: ` +
-                                   `${context.parsed.toFixed(1)}%`;
-                        }
+                        title: items =>
+                            items[0].dataIndex === 0
+                                ? "High Delay"
+                                : "Low Delay",
+                        label: context =>
+                            `${context.parsed.x.toFixed(1)}%`
                     }
                 }
             }
-        }
+        },
+
+        plugins: [barValueLabelPlugin]
 
     });
 
