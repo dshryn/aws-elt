@@ -2,7 +2,9 @@ dataset/
 output/
 venv/
 be/__pycache__
+deployment.zip
 
 secrets.txt
 flight_dashboard.pbix
 test.pbix
+flight-delay-key.pem
